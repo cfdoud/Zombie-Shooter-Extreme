@@ -117,6 +117,10 @@ int main(void)
     enemyPos.x = screenWidth  - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
 
+    //Vector2 bulletPos;
+    //bulletPos.x = screenWidth - bulletRec.width;
+    //bulletPos.x = screenWidth - bulletRec.width;
+
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
     Bullet bullet = InitBullet(bulletPosition, bulletVelocity, bulletTexture);
@@ -317,7 +321,10 @@ int main(void)
                     i--; // Update loop index
                 }
             }
-
+            //if (collision(27, 27, x, y)) {
+            //float x[2] = { enemyPos.x, enemyPos.y };
+            //float b[2] = { bullet.x, bullet.y };
+                //if(collision(bullet, enemy, bullet))
           
                 if (enemyHit)
                 {
