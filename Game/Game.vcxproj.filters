@@ -36,6 +36,9 @@
     <ClCompile Include="bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="hazmat.png">
@@ -56,7 +59,7 @@
     <Image Include="alagard.png">
       <Filter>Source Files</Filter>
     </Image>
-    <Image Include="pengfei.png">
+    <Image Include="logo.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="zuc.png">
@@ -95,6 +98,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="bullet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

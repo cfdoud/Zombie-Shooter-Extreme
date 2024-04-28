@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="crosshair.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="bullet.cpp" />
   </ItemGroup>
@@ -144,7 +145,7 @@
     <Image Include="gravesnew_1_4.png" />
     <Image Include="hazmat.png" />
     <Image Include="Image.png" />
-    <Image Include="pengfei.png" />
+    <Image Include="logo.png" />
     <Image Include="scarfy.png" />
     <Image Include="TITLE.png" />
     <Image Include="zuc.png" />
@@ -153,6 +154,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="crosshair.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="fonts.h" />
     <ClInclude Include="logic.h" />
   </ItemGroup>

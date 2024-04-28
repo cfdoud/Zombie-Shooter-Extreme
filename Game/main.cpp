@@ -8,6 +8,8 @@
 #include "crosshair.h"
 #include "character.h"
 #include "bullet.h"
+#include "enemy.h"
+
 
 #define MAX_FONTS 4
 using namespace std;
@@ -23,7 +25,7 @@ static const int screenMidX = 960;
 static const int screenMidY = 540;
 
 //static GameScreen transition = UNKNOWN;
-
+bool enemyHit = false;
 
 
 
@@ -81,30 +83,19 @@ int main(void)
     if (scrollingBack <= -Graveyard.width * 2) scrollingBack = 0;
     //lolz
     Texture2D background = LoadTexture("Ending.jpeg");
-    Texture2D logo = LoadTexture("pengfei.png");
+    Texture2D logo = LoadTexture("logo.png");
     //Enemy Texture
     int enemyframesSpeed = 8;
     Texture2D enemy = LoadTexture("deadScarfy.png");
 
    
-    //int framesCounter = 0;
-
-    //dimensions of HAzmat
-    // Rectangle heroRec;
-    // heroRec.width = hero.width / 6; //because of frames
-    // heroRec.height = hero.height;
-    // heroRec.x = 0;
-    // heroRec.y = 0;
-    //     //position of hero
-    // Vector2 heroPos;
-    // heroPos.x = screenWidth / 2 - heroRec.width / 2;
-    // heroPos.y = screenHeight / 2 - heroRec.height / 2;
+    
     Resources font;
     int fSpace = font.getSpacings();
     int fType = font.getType();
 
     Vector2 title;
-    title = MeasureTextEx(fonts[1], "Clone Survival", 250, fSpace);
+    title = MeasureTextEx(fonts[1], "Zombie Survival", 250, fSpace);
     title.x = 300;
     title.y = 540;
 
@@ -126,9 +117,11 @@ int main(void)
     enemyPos.x = screenWidth  - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
 
-  
-    Bullet bullet = InitBullet(hero.getCharPos(), { 1, 0 }, bulletTexture);
-
+    Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
+    Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
+    Bullet bullet = InitBullet(bulletPosition, bulletVelocity, bulletTexture);
+    Bullet* bullets = NULL;
+    int bulletCount = 0;
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -171,6 +164,7 @@ int main(void)
         {
             
             UpdateCrosshair(crosshair);
+            UpdateBullet(bullet);
             DrawTexture(Graveyard, 0, 0, WHITE);
             //currentScreen = GAMEPLAY;
             // TODO: Update GAMEPLAY screen variables here!
@@ -234,6 +228,16 @@ int main(void)
 
             // if (IsKeyDown(KEY_W)) heroPos.y -= 4.0f;
             // if (IsKeyDown(KEY_S)) heroPos.y += 4.0f;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
+
+                
+                Vector2 bulletVelocity = Vector2Scale(direction, 10);
+
+                
+                //bullets[bulletCount] = InitBullet(player.getCharPos(), bulletVelocity, LoadTexture("bullet.png"));
+                //bulletCount++;
+            }
 
             //  BeginDrawing();
 
@@ -278,6 +282,60 @@ int main(void)
                 }
             }
 
+
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                // Calculate direction vector from player to crosshair
+                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
+
+                // Set initial bullet velocity based on direction
+                Vector2 bulletVelocity = Vector2Scale(direction, 10); // Adjust the bullet speed as needed
+
+                // Add new bullet to array
+                bullets = (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
+                bullets[bulletCount] = InitBullet(hero.getCharPos(), bulletVelocity, bulletTexture);
+                bulletCount++;
+            }
+
+            // Update and draw bullets
+            for (int i = 0; i < bulletCount; i++)
+            {
+                UpdateBullet(bullets[i]);
+
+                // Remove bullets that go off-screen
+                if (bullets[i].position.x > screenWidth || bullets[i].position.y > screenHeight ||
+                    bullets[i].position.x < 0 || bullets[i].position.y < 0)
+                {
+                    // Remove bullet from array
+                    for (int j = i; j < bulletCount - 1; j++)
+                    {
+                        bullets[j] = bullets[j + 1];
+                    }
+                    bulletCount--;
+                    bullets = (Bullet*)realloc(bullets, bulletCount * sizeof(Bullet));
+                    
+                    i--; // Update loop index
+                }
+            }
+
+          
+                if (enemyHit)
+                {
+                    enemyPos.x = screenWidth + 100; // Move the enemy outside the screen
+                    enemyPos.y = screenHeight + 100;
+                    enemyHit = true;
+                    break; // Exit the loop since we already hit the enemy
+                }
+           
+
+
+            
+
+            // Draw bullets
+            for (int i = 0; i < bulletCount; i++)
+            {
+                DrawBullet(bullets[i]);
+            }
 
 
 
@@ -344,14 +402,47 @@ int main(void)
             // TODO: Draw TITLE screen here!
 
             //DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
-            DrawTextEx(fonts[fType], "Clone Survival : How Long Can You Last?!?", title, 80, fSpace, VIOLET);
+            DrawTextEx(fonts[fType], "Zombie Shooter", title, 80, fSpace, VIOLET);
             DrawText("PRESS SPACE to PLAY", 500, 640, 50, YELLOW);
 
         } break;
         case GAMEPLAY:
         {
+            DrawBullet(bullet);
             DrawCrosshair(crosshair);
 
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                // Calculate direction vector from player to crosshair
+                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
+
+                // Set initial bullet velocity based on direction
+                Vector2 bulletVelocity = Vector2Scale(direction, 10);
+
+                // Add new bullet to array
+                bullets = (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
+                bullets[bulletCount] = InitBullet(hero.getCharPos(), bulletVelocity, LoadTexture("bullet.png"));
+                bulletCount++;
+            }
+            
+            for (int i = 0; i < bulletCount; i++)
+            {
+                UpdateBullet(bullets[i]);
+
+                // Remove bullets that go off-screen
+                if (bullets[i].position.x > screenWidth || bullets[i].position.y > screenHeight ||
+                    bullets[i].position.x < 0 || bullets[i].position.y < 0)
+                {
+                    // Remove bullet from array
+                    for (int j = i; j < bulletCount - 1; j++)
+                    {
+                        bullets[j] = bullets[j + 1];
+                    }
+                    bulletCount--;
+                    bullets = (Bullet*)realloc(bullets, bulletCount * sizeof(Bullet));
+                    i--; // Update loop index
+                }
+            }
 
             //DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
         }break;
@@ -386,6 +477,8 @@ int main(void)
     UnloadTexture(titleScreen);
     UnloadSound(gameStart);
     UnloadTexture(crosshair.texture);
+    UnloadTexture(bulletTexture);
+    free(bullets);
     //ClearBackground(background);
     //UnloadTexture(background);
     UnloadSound(sound);
