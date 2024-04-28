@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{189218f4-8a71-4dee-870a-72d0a96d0c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources">
+      <UniqueIdentifier>{1cd1d971-2135-4d03-ba5b-1284b706cfbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\textures">
+      <UniqueIdentifier>{83f5605d-4ad8-4a84-9436-bdcf5967b076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Fonts">
+      <UniqueIdentifier>{ba5b7b78-318a-475e-8e1f-1c15a08a871c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crosshair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="hazmat.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="scarfy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="deadScarfy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Ending.jpeg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="gravesnew_1_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="alagard.png">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="pengfei.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="zuc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TITLE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="gravesfin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\..\..\git-root\crosshair.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="crosshair1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Image.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="logic.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="crosshair.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="start.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+</Project>
