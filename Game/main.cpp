@@ -117,10 +117,6 @@ int main(void)
     enemyPos.x = screenWidth  - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
 
-    //Vector2 bulletPos;
-    //bulletPos.x = screenWidth - bulletRec.width;
-    //bulletPos.x = screenWidth - bulletRec.width;
-
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
     Bullet bullet = InitBullet(bulletPosition, bulletVelocity ,bulletTexture);
@@ -325,22 +321,8 @@ int main(void)
                     
                     i--; // Update loop index
                 }
-                if (collision(10, 27, z, x)) {
-                    PlaySound(sound);
-                    cout << "Enemy has been hit" << endl;
-                }
             }
-            //if (collision(27, 27, x, y)) {
-            //float x[2] = { enemyPos.x, enemyPos.y };
-            //float b[2] = { bullet.x, bullet.y };
-                //if(collision(bullet, enemy, bullet))
 
-            /*float z[2] = { bullet.position.x, bullet.position.y };
-
-            if (collision(10, 27, z, y)) {
-                PlaySound(sound);
-                cout << "Enemy has been hit" << endl;
-            }*/
           
                 if (enemyHit)
                 {
@@ -361,7 +343,7 @@ int main(void)
             }
 
 
-
+            //update enemy position 
             if (enemyPos.x > screenWidth-100) {
                 enemyPos.x = screenWidth-100;
             }
@@ -392,6 +374,16 @@ int main(void)
             // Press enter to return to TITLE screen
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
             {
+
+                // Reset hero position
+                hero.setVector(screenWidth / 2 - hero.getRectangleWidth() / 2, screenWidth / 2 - hero.getCharacterWidth() / 2);
+                //Reset enemy position
+                enemyPos.x = screenWidth - 10;
+                enemyPos.y = screenHeight - 20;
+                // Clear bullets and reset bullet count
+                free(bullets);
+                bullets = NULL;
+                bulletCount = 0;
                 currentScreen = TITLE;
             }
         } break;
@@ -438,11 +430,35 @@ int main(void)
         }break;
         case ENDING:
         {
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                // Reset hero position
+                hero.setVector(screenWidth / 2 - hero.getRectangleWidth() / 2, screenWidth / 2 - hero.getCharacterWidth() / 2);
+                //Reset enemy position
+                enemyPos.x = screenWidth - 10;
+                enemyPos.y = screenHeight - 20;
+                // Clear bullets and reset bullet count
+                free(bullets);
+                bullets = NULL;
+                bulletCount = 0;
+                //current screen title
+                currentScreen = LOGO;
+            }
             // TODO: Draw ENDING screen here!
             DrawRectangle(0, 0, screenWidth, screenHeight, RED);
-            DrawText("Game OVER", 20, 20, 40, DARKBLUE);
-            DrawText("PRESS ESC	TO CLOSE", 120, 220, 20, DARKBLUE);
-        }break;
+
+            // Measure text width and height
+            Vector2 textSize = MeasureTextEx(fonts[1], "Game OVER", 40, 1);
+
+            //calculate text position to center in screen
+            float textX = (screenWidth - textSize.x) / 2;
+            float textY = (screenHeight - textSize.y) / 2;
+            DrawText("GAME OVER", (textX-20), (textY-150), 60, DARKBLUE);
+            DrawText("PRESS ENTER TO RESTART", (textX-20), textY, 40, DARKBLUE);
+            DrawText("PRESS ESC	TO CLOSE", (textX-20), (textY-60), 40, DARKBLUE);           
+
+        }break; 
         case EASTEREGG:
         {
             DrawText("EASTER EGG!", 20, 20, 40, DARKBLUE);
