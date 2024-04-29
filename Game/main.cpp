@@ -456,7 +456,7 @@ int main(void) {
             
             //DrawRectangle(0, 0, screenWidth, screenHeight, RED);
             //DrawText("YOU ARE DEAD", 20, 20, 40, DARKBLUE);
-            DrawText(("High-Score of " + to_string(enemyCount)).c_str(), 800, 500, 40, DARKBLUE);
+            DrawText(("High-Score of " + to_string(enemyCount)).c_str(), 800, 500, 40, RED);
             DrawText("PRESS ESC	TO QUIT", 120, 220, 20, DARKBLUE);
             
         } break;
