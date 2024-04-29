@@ -59,9 +59,6 @@
     <Image Include="logo.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="zuc.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="TITLE.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -78,6 +75,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dead.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

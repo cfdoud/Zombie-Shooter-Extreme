@@ -10,13 +10,13 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "vector"
+#include <sstream>
+
 
 #define MAX_FONTS 4
 using namespace std;
 #define MAX_INPUT_CHARS 12;
-//------------------------------------------------------------------------------------------
-// Types and Structures Definition
-//-----------------------------------------------------------------------------------------
+
 typedef enum GameScreen {
     LOGO = 0,
     TITLE,
@@ -56,7 +56,7 @@ int main(void) {
     // Initialization
     //--------------------------------------------------------------------------------------
     Rectangle screen = { 0, 0, screenWidth, screenHeight };
-    InitWindow(screenWidth, screenHeight, "CloneSurvival");
+    InitWindow(screenWidth, screenHeight, "UnDead Knight");
     HideCursor();
     InitAudioDevice();
     GameScreen currentScreen = LOGO;
@@ -85,6 +85,7 @@ int main(void) {
 
     Texture2D Graveyard = LoadTexture("map.png");
     Texture2D titleScreen = LoadTexture("TITLE.png");
+    Texture2D endScreen = LoadTexture("dead.png");
     if (scrollingBack <= -Graveyard.width * 2)
         scrollingBack = 0;
     Texture2D background = LoadTexture("Ending.jpeg");
@@ -93,9 +94,9 @@ int main(void) {
 
     // Enemy Texture
     int enemyframesSpeed = 8;
-    Texture2D enemy = LoadTexture("deadScarfy.png");
+    Texture2D enemy = LoadTexture("zombie.png");
 
-    Resources font;
+    Resources font;//font stuff
     int fSpace = font.getSpacings();
     int fType = font.getType();
 
@@ -114,15 +115,19 @@ int main(void) {
 
     //Enemy parameters, width, "hitbox", and such
     Rectangle enemyRec;
-    enemyRec.width = enemy.width / 6; // because of frames
+    enemyRec.width = enemy.width / 6; 
     enemyRec.height = enemy.height;
     enemyRec.x = 0;
     enemyRec.y = 0;
-    // position of ENEMY
+   
+
+
     Vector2 enemyPos;
     enemyPos.x = screenWidth - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
-    // New enemy positions
+ 
+
+
     Vector2 enemyPositions[10];
 
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
@@ -409,9 +414,8 @@ int main(void) {
 
         } break;
         case ENDING: {
-            // TODO: Update ENDING screen variables here!
-            DrawTexturePro(background, screen, screen, Vector2Zero(), 0, WHITE);
-            // Press enter to return to TITLE screen
+            DrawTexture(endScreen, 0, 0, WHITE);
+            
             if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
                 currentScreen = TITLE;
             }
@@ -449,9 +453,12 @@ int main(void) {
         } break;
         case ENDING: {
             // TODO: Draw ENDING screen here!
-            DrawRectangle(0, 0, screenWidth, screenHeight, RED);
-            DrawText("YOU ARE DEAD", 20, 20, 40, DARKBLUE);
+            
+            //DrawRectangle(0, 0, screenWidth, screenHeight, RED);
+            //DrawText("YOU ARE DEAD", 20, 20, 40, DARKBLUE);
+            DrawText(("High-Score of " + to_string(enemyCount)).c_str(), 1000, 500, 40, DARKBLUE);
             DrawText("PRESS ESC	TO QUIT", 120, 220, 20, DARKBLUE);
+            
         } break;
         
 
@@ -475,6 +482,7 @@ int main(void) {
     UnloadSound(gameStart);
     UnloadTexture(crosshair.texture);
     UnloadTexture(bulletTexture);
+    UnloadTexture(endScreen);
     free(bullets);
     // ClearBackground(background);
     // UnloadTexture(background);

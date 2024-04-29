@@ -139,6 +139,7 @@
     <Image Include="coolfont.png" />
     <Image Include="bullet.png" />
     <Image Include="crosshair1.png" />
+    <Image Include="dead.png" />
     <Image Include="zombie.png" />
     <Image Include="Ending.jpeg" />
     <Image Include="map.png" />
@@ -147,7 +148,6 @@
     <Image Include="logo.png" />
     <Image Include="hero.png" />
     <Image Include="TITLE.png" />
-    <Image Include="zuc.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
