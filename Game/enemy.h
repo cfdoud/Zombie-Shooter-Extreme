@@ -7,6 +7,7 @@ struct Enemy
 {
     Vector2 position;
     float speed;
+    int width;
     // Add more properties as needed
 };
 

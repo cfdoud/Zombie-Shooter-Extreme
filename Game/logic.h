@@ -16,5 +16,10 @@ Vector2 GenerateRandomPosition(int screenWidth, int screenHeight) {
     return { (float)(GetRandomValue(0, screenWidth)), (float)(GetRandomValue(0, screenHeight)) };
 }
 
+//void UpdateEnemyPosition(Vector2& enemyPos, float* playerVector, int iRand, float aiSpeed) {
+//    
+//
+//}
+
 
 #endif

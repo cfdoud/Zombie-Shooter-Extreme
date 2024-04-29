@@ -9,6 +9,7 @@
 #include "character.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "vector"
 
 
 #define MAX_FONTS 4
@@ -116,10 +117,9 @@ int main(void)
     Vector2 enemyPos;
     enemyPos.x = screenWidth  - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
-
-    //Vector2 bulletPos;
-    //bulletPos.x = screenWidth - bulletRec.width;
-    //bulletPos.x = screenWidth - bulletRec.width;
+    //New enemy positions
+    Vector2 enemyPositions[10];
+ 
 
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
@@ -206,6 +206,21 @@ int main(void)
             // DrawTextureRec(h.getCharacter(), heroRec, heroPos, WHITE);
             DrawTextureRec(hero.getCharacter(), hero.getCharRect(), hero.getCharPos(), WHITE);
             DrawTextureRec(enemy, enemyRec, enemyPos, WHITE);
+            if (enemyHit == true)
+            {
+                enemyCount++;
+                cout << "enemy hit = " << enemyCount << endl;
+                //enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth, screenHeight);
+                enemyPos = GenerateRandomPosition(screenWidth, screenHeight);
+
+                enemyHit = false;
+                // Exit the loop since we already hit the enemy
+            }
+
+            for (int i = 0; i < enemyCount; i++) {
+                DrawTextureRec(enemy, enemyRec, enemyPositions[i], WHITE);
+                cout << "enemy needs to be redrawn" << enemyCount << endl;
+            }
 
             //COLLISION DETECTION
 
@@ -254,6 +269,11 @@ int main(void)
 
             int towardsPlayer = (rand() % 2);
             float aiSpeed = 4.5f;
+
+
+            /*for (int i = 0; i < enemyCount; i++) {
+                UpdateEnemyPosition(enemyPositions[i], hero.getCharPos(), iRand, aiSpeed, enemy.width);
+            }*/
 
 
             if (towardsPlayer == 0) {
@@ -329,32 +349,31 @@ int main(void)
                     PlaySound(sound);
                     cout << "Enemy has been hit" << endl;
                     enemyHit = true;
+                    for (int j = i; j < bulletCount - 1; j++)
+                    {
+                        bullets[j] = bullets[j + 1];
+                    }
+                    bulletCount--;
+                    bullets = (Bullet*)realloc(bullets, bulletCount * sizeof(Bullet));
+
+                    // Update loop index
+                    i--;
                 }
             }
-            //if (collision(27, 27, x, y)) {
-            //float x[2] = { enemyPos.x, enemyPos.y };
-            //float b[2] = { bullet.x, bullet.y };
-                //if(collision(bullet, enemy, bullet))
-
-            /*float z[2] = { bullet.position.x, bullet.position.y };
-
-            if (collision(10, 27, z, y)) {
-                PlaySound(sound);
-                cout << "Enemy has been hit" << endl;
-            }*/
+            
           
-                if (enemyHit == true)
-                {
-                    enemyCount++;
-                    cout << "enemy hit = " << enemyHit << endl;
-                    enemyPos = GenerateRandomPosition(screenWidth,screenHeight);
-                    for (int i = 0; i < enemyCount; i++) {
-                        DrawTextureRec(enemy, enemyRec, enemyPos, WHITE);
-                        cout << "enemy needs to be redrawn" << endl;
-                    }
-                    enemyHit = false;
-                    // Exit the loop since we already hit the enemy
-                }
+                //if (enemyHit == true)
+                //{
+                //    enemyCount++;
+                //    cout << "enemy hit = " << enemyHit << endl;
+                //    enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth, screenHeight);
+                //    for (int i = 0; i < enemyCount; i++) {
+                //        DrawTextureRec(enemy, enemyRec, enemyPositions[i], WHITE);
+                //        cout << "enemy needs to be redrawn" << enemyCount << endl;
+                //    }
+                //    enemyHit = false;
+                //    // Exit the loop since we already hit the enemy
+                //}
            
 
                 
@@ -439,7 +458,7 @@ int main(void)
         {
             DrawBullet(bullet);
             DrawCrosshair(crosshair);
-
+            
             //DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
         }break;
         case ENDING:
