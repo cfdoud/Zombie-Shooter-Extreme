@@ -123,7 +123,7 @@ int main(void)
 
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
-    Bullet bullet = InitBullet(bulletPosition, bulletVelocity, bulletTexture);
+    Bullet bullet = InitBullet(bulletPosition, bulletVelocity ,bulletTexture);
     Bullet* bullets = NULL;
     int bulletCount = 0;
     // Main game loop
@@ -182,6 +182,10 @@ int main(void)
                 PlaySound(sound);
                 currentScreen = ENDING;
             }
+            //bool collision(int playerRadius, int aiRaidius, float* playerVector, float* aiVector) {
+
+            //Bullet Collision
+            
             if (framesCounter >= (60 / hero.getFrame()))
             {
                 framesCounter = 0;
@@ -305,6 +309,7 @@ int main(void)
             for (int i = 0; i < bulletCount; i++)
             {
                 UpdateBullet(bullets[i]);
+                float z[2] = { bullets[i].position.x, bullets[i].position.y };
 
                 // Remove bullets that go off-screen
                 if (bullets[i].position.x > screenWidth || bullets[i].position.y > screenHeight ||
@@ -320,11 +325,22 @@ int main(void)
                     
                     i--; // Update loop index
                 }
+                if (collision(10, 27, z, x)) {
+                    PlaySound(sound);
+                    cout << "Enemy has been hit" << endl;
+                }
             }
             //if (collision(27, 27, x, y)) {
             //float x[2] = { enemyPos.x, enemyPos.y };
             //float b[2] = { bullet.x, bullet.y };
                 //if(collision(bullet, enemy, bullet))
+
+            /*float z[2] = { bullet.position.x, bullet.position.y };
+
+            if (collision(10, 27, z, y)) {
+                PlaySound(sound);
+                cout << "Enemy has been hit" << endl;
+            }*/
           
                 if (enemyHit)
                 {
@@ -417,39 +433,6 @@ int main(void)
         {
             DrawBullet(bullet);
             DrawCrosshair(crosshair);
-
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
-                // Calculate direction vector from player to crosshair
-                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
-
-                // Set initial bullet velocity based on direction
-                Vector2 bulletVelocity = Vector2Scale(direction, 10);
-
-                // Add new bullet to array
-                bullets = (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
-                bullets[bulletCount] = InitBullet(hero.getCharPos(), bulletVelocity, LoadTexture("bullet.png"));
-                bulletCount++;
-            }
-            
-            for (int i = 0; i < bulletCount; i++)
-            {
-                UpdateBullet(bullets[i]);
-
-                // Remove bullets that go off-screen
-                if (bullets[i].position.x > screenWidth || bullets[i].position.y > screenHeight ||
-                    bullets[i].position.x < 0 || bullets[i].position.y < 0)
-                {
-                    // Remove bullet from array
-                    for (int j = i; j < bulletCount - 1; j++)
-                    {
-                        bullets[j] = bullets[j + 1];
-                    }
-                    bulletCount--;
-                    bullets = (Bullet*)realloc(bullets, bulletCount * sizeof(Bullet));
-                    i--; // Update loop index
-                }
-            }
 
             //DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
         }break;

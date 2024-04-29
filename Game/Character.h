@@ -47,6 +47,9 @@ public:
     Vector2 getCharPos() {
         return charPos;
     }
+    /*Vector2 getBulletPos() {
+        return bulletPos;
+    }*/
 
     int getFrame() {
         return frames;

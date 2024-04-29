@@ -20,3 +20,8 @@ void UpdateBullet(Bullet& bullet) {
 void DrawBullet(Bullet& bullet) {
     DrawTexture(bullet.texture, bullet.position.x, bullet.position.y, WHITE);
 }
+
+//void setVector(int x, int y) {
+//    bulletPos.x = x;
+//    bulletPos.y = y;
+//}
