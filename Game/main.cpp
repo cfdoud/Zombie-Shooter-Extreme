@@ -11,43 +11,47 @@
 #include "enemy.h"
 #include "vector"
 
-
 #define MAX_FONTS 4
 using namespace std;
 #define MAX_INPUT_CHARS 12;
 //------------------------------------------------------------------------------------------
 // Types and Structures Definition
 //-----------------------------------------------------------------------------------------
-typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING, EASTEREGG } GameScreen;
-//GameScreen currentScreen = LOGO;
+typedef enum GameScreen {
+    LOGO = 0,
+    TITLE,
+    GAMEPLAY,
+    ENDING,
+    EASTEREGG
+} GameScreen;
+// GameScreen currentScreen = LOGO;
 static const int screenWidth = 1920;
 static const int screenHeight = 1080;
 static const int screenMidX = 960;
 static const int screenMidY = 540;
 
-//static GameScreen transition = UNKNOWN;
+// static GameScreen transition = UNKNOWN;
 bool enemyHit = false;
 
-
-
-
-//currentScreen = LOGO;
+// currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxScary = { 0 };
 
-//stuff for transtion screen
-static void changeScreen(int screen);     // Change to screen, no transition effect
-static void transistion(int screen); // Request transition to next screen
-static void updateScreen(void);         // Update transition effect
-static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-static void UpdateDrawFrame(void);          // Update and draw one frame
+// stuff for transtion screen
+static void changeScreen(int screen); // Change to screen, no transition effect
+static void transistion(int screen);  // Request transition to next screen
+static void updateScreen(void);       // Update transition effect
+static void
+DrawTransition(void); // Draw transition effect (full-screen rectangle)
+static void UpdateDrawFrame(void); // Update and draw one frame
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void)
-{
-    
+void enemyMove(int x, int y) {}
+
+int main(void) {
+
     int enemyCount = 1;
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -56,13 +60,11 @@ int main(void)
     HideCursor();
     InitAudioDevice();
     GameScreen currentScreen = LOGO;
-   
 
     int framesCounter = 0;
     int enemyframesCounter = 0;
-    
 
-    SetTargetFPS(60);               
+    SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
 
     // Load texture
@@ -70,27 +72,27 @@ int main(void)
     Sound gameStart = LoadSound("start.wav");
     int currentFrame = 0;
     int enemycurrentFrame = 0;
-    Crosshair crosshair = InitCrosshair();
+    Crosshair crosshair;
+    crosshair = InitCrosshair();
     Texture2D bulletTexture = LoadTexture("bullet.png");
-    
-    //Fonts
+
+    // Fonts
     Font fonts[MAX_FONTS] = { 0 };
     fonts[1] = LoadFont("alagard.png");
-    //background
+    // background
     float scrollingBack = 0.0f;
     Texture2D zuc = LoadTexture("zuc.png");
     Texture2D Graveyard = LoadTexture("gravesfin.png");
     Texture2D titleScreen = LoadTexture("TITLE.png");
-    if (scrollingBack <= -Graveyard.width * 2) scrollingBack = 0;
-    //lolz
+    if (scrollingBack <= -Graveyard.width * 2)
+        scrollingBack = 0;
+    // lolz
     Texture2D background = LoadTexture("Ending.jpeg");
     Texture2D logo = LoadTexture("logo.png");
-    //Enemy Texture
+    // Enemy Texture
     int enemyframesSpeed = 8;
     Texture2D enemy = LoadTexture("deadScarfy.png");
 
-   
-    
     Resources font;
     int fSpace = font.getSpacings();
     int fType = font.getType();
@@ -103,78 +105,71 @@ int main(void)
     Character hero;
     hero.setFrame(8);
     hero.setChar(LoadTexture("scarfy.png"));
-    hero.setRectangle(0, 0, hero.getCharacterWidth() / 6, hero.getCharacterHeight());
-    hero.setVector(screenWidth / 2 - hero.getRectangleWidth() / 2, screenWidth / 2 - hero.getCharacterWidth() / 2);
-
+    hero.setRectangle(0, 0, hero.getCharacterWidth() / 6,
+        hero.getCharacterHeight());
+    hero.setVector(screenWidth / 2 - hero.getRectangleWidth() / 2,
+        screenWidth / 2 - hero.getCharacterWidth() / 2);
 
     ////dimensions of ENEMY
     Rectangle enemyRec;
-    enemyRec.width = enemy.width / 6; //because of frames
+    enemyRec.width = enemy.width / 6; // because of frames
     enemyRec.height = enemy.height;
     enemyRec.x = 0;
     enemyRec.y = 0;
-    //position of ENEMY
+    // position of ENEMY
     Vector2 enemyPos;
-    enemyPos.x = screenWidth  - enemyRec.width;
+    enemyPos.x = screenWidth - enemyRec.width;
     enemyPos.y = screenHeight - enemyRec.height;
-    //New enemy positions
+    // New enemy positions
     Vector2 enemyPositions[10];
- 
 
     Vector2 bulletPosition = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 bulletVelocity = { 5.0f, 0.0f }; // Example velocity
-    Bullet bullet = InitBullet(bulletPosition, bulletVelocity ,bulletTexture);
+    Bullet bullet = InitBullet(bulletPosition, bulletVelocity, bulletTexture);
     Bullet* bullets = NULL;
     int bulletCount = 0;
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose()) // Detect window close button or ESC key
     {
         DrawCrosshair(crosshair);
         UpdateCrosshair(crosshair);
         // Update
-        //UpdateDrawFrame();
+        // UpdateDrawFrame();
         //----------------------------------------------------------------------------------
-        switch (currentScreen)
-        {
-        case LOGO:
-        {
+        switch (currentScreen) {
+        case LOGO: {
             DrawTexture(logo, 800, 300, WHITE);
             // TODO: Update LOGO screen variables here!
-            framesCounter++;    // Count frames
+            framesCounter++; // Count frames
 
             // Wait for 2 seconds (120 frames) before jumping to TITLE screen
-            if (framesCounter > 300)
-            {
-                //InitTitleScreen();
+            if (framesCounter > 300) {
+                // InitTitleScreen();
                 currentScreen = TITLE;
             }
 
         } break;
-        case TITLE:
-        {
+        case TITLE: {
             // TODO: Update TITLE screen variables here!
             DrawTexture(titleScreen, 0, 0, WHITE);
             // Press enter to change to GAMEPLAY screen
-            if (IsKeyPressed(KEY_SPACE))
-            {
+            if (IsKeyPressed(KEY_SPACE)) {
                 PlaySound(gameStart);
-                //InitTitleScreen();
+                // InitTitleScreen();
                 currentScreen = GAMEPLAY;
             }
 
-
         } break;
-        case GAMEPLAY:
-        {
-            
+        case GAMEPLAY: {
+
             UpdateCrosshair(crosshair);
             UpdateBullet(bullet);
             DrawTexture(Graveyard, 0, 0, WHITE);
-            //currentScreen = GAMEPLAY;
-            // TODO: Update GAMEPLAY screen variables here!
+            // currentScreen = GAMEPLAY;
+            //  TODO: Update GAMEPLAY screen variables here!
             enemyframesCounter++;
             framesCounter++;
-            //COLLISION DETECTION
+            // COLLISION DETECTION
             float x[2] = { enemyPos.x, enemyPos.y };
             // float y[2] = { heroPos.x, heroPos.y };
             float y[2] = { hero.getCharPos().x, hero.getCharPos().y };
@@ -182,36 +177,37 @@ int main(void)
                 PlaySound(sound);
                 currentScreen = ENDING;
             }
-            //bool collision(int playerRadius, int aiRaidius, float* playerVector, float* aiVector) {
+            // bool collision(int playerRadius, int aiRaidius, float* playerVector,
+            // float* aiVector) {
 
-            //Bullet Collision
-            
-            if (framesCounter >= (60 / hero.getFrame()))
-            {
+            // Bullet Collision
+
+            if (framesCounter >= (60 / hero.getFrame())) {
                 framesCounter = 0;
                 currentFrame++;
 
-                if (currentFrame > 5) currentFrame = 0;
+                if (currentFrame > 5)
+                    currentFrame = 0;
                 hero.setRectangleX(currentFrame * hero.getRectangleWidth());
             }
-            if (enemyframesCounter >= (60 / enemyframesSpeed))
-            {
+            if (enemyframesCounter >= (60 / enemyframesSpeed)) {
                 enemyframesCounter = 0;
                 enemycurrentFrame++;
 
-                if (enemycurrentFrame > 5) enemycurrentFrame = 0;
+                if (enemycurrentFrame > 5)
+                    enemycurrentFrame = 0;
 
                 enemyRec.x = enemycurrentFrame * enemy.width / 6;
             }
             // DrawTextureRec(h.getCharacter(), heroRec, heroPos, WHITE);
-            DrawTextureRec(hero.getCharacter(), hero.getCharRect(), hero.getCharPos(), WHITE);
+            DrawTextureRec(hero.getCharacter(), hero.getCharRect(), hero.getCharPos(),
+                WHITE);
             DrawTextureRec(enemy, enemyRec, enemyPos, WHITE);
-            if (enemyHit == true)
-            {
+            if (enemyHit == true) {
                 enemyCount++;
                 cout << "enemy hit = " << enemyCount << endl;
-                //enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth, screenHeight);
-                enemyPos = GenerateRandomPosition(screenWidth, screenHeight);
+                enemyPositions[enemyCount] =
+                    GenerateRandomPosition(screenWidth, screenHeight);
 
                 enemyHit = false;
                 // Exit the loop since we already hit the enemy
@@ -222,11 +218,10 @@ int main(void)
                 cout << "enemy needs to be redrawn" << enemyCount << endl;
             }
 
-            //COLLISION DETECTION
+            // COLLISION DETECTION
 
             // Press enter to change to ENDING screen
-            if (IsKeyPressed(KEY_ENTER))
-            {
+            if (IsKeyPressed(KEY_ENTER)) {
                 currentScreen = ENDING;
             }
             if (IsKeyDown(KEY_D)) {
@@ -246,51 +241,77 @@ int main(void)
                 //     hero.width *= -1;
                 // }
             }
-            if (IsKeyDown(KEY_W)) hero.setVectorYMove(-4);
-            if (IsKeyDown(KEY_S)) hero.setVectorYMove(4);
+            if (IsKeyDown(KEY_W))
+                hero.setVectorYMove(-4);
+            if (IsKeyDown(KEY_S))
+                hero.setVectorYMove(4);
 
             // if (IsKeyDown(KEY_W)) heroPos.y -= 4.0f;
             // if (IsKeyDown(KEY_S)) heroPos.y += 4.0f;
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
+                Vector2 direction = Vector2Normalize(
+                    Vector2Subtract(crosshair.position, hero.getCharPos()));
 
-                
                 Vector2 bulletVelocity = Vector2Scale(direction, 10);
 
-                
-                //bullets[bulletCount] = InitBullet(player.getCharPos(), bulletVelocity, LoadTexture("bullet.png"));
-                //bulletCount++;
+                // bullets[bulletCount] = InitBullet(player.getCharPos(),
+                // bulletVelocity, LoadTexture("bullet.png")); bulletCount++;
             }
 
             //  BeginDrawing();
 
             srand(time(0));
+
             int iRand = (rand() % 11) + 1;
-
             int towardsPlayer = (rand() % 2);
-            float aiSpeed = 4.5f;
-
+            float aiSpeed = 3.5f;
 
             /*for (int i = 0; i < enemyCount; i++) {
-                UpdateEnemyPosition(enemyPositions[i], hero.getCharPos(), iRand, aiSpeed, enemy.width);
+                UpdateEnemyPosition(enemyPositions[i], hero.getCharPos(), iRand,
+            aiSpeed, enemy.width);
             }*/
 
+            for (int i = 0; i < enemyCount; i++) {
+                srand(time(NULL) + iRand);
+                iRand = (rand() % 11) + 1;
+                towardsPlayer = (rand() % 2);
+                if (towardsPlayer == 0) {
+                    if (enemyPositions[i].x <= hero.getCharPos().x) {
+                        enemyPositions[i].x += aiSpeed;
+                    }
+                    else {
+                        enemyPositions[i].x -= aiSpeed;
+                    }
+                }
+                else {
+                    if (enemyPositions[i].y <= hero.getCharPos().y) {
+                        enemyPositions[i].y += aiSpeed;
+
+                    }
+                    else {
+                        enemyPositions[i].y -= aiSpeed;
+                    }
+                }
+            }
+
+            srand(time(NULL) + iRand);
 
             if (towardsPlayer == 0) {
                 if (enemyPos.x <= hero.getCharPos().x) {
                     enemyPos.x += aiSpeed;
                     enemy.width = abs(enemy.width);
                 }
-
                 else {
                     enemyPos.x -= aiSpeed;
                     if (enemy.width > 0) {
                         enemy.width *= -1;
                     }
                 }
-                if (iRand == 2 || iRand == 8 || iRand == 12 && enemyPos.y <= hero.getCharPos().y)
+                if (iRand == 2 || iRand == 8 ||
+                    iRand == 12 && enemyPos.y <= hero.getCharPos().y)
                     enemyPos.y -= aiSpeed;
-                else if (iRand == 9 || iRand == 10 || iRand == 0 && enemyPos.y <= hero.getCharPos().y)
+                else if (iRand == 9 || iRand == 10 ||
+                    iRand == 0 && enemyPos.y <= hero.getCharPos().y)
                     enemyPos.y += aiSpeed;
             }
             else {
@@ -298,11 +319,13 @@ int main(void)
                     enemyPos.y += aiSpeed;
                 else
                     enemyPos.y -= aiSpeed;
-                if (iRand == 4 || iRand == 1 || iRand == 6 && enemyPos.x <= hero.getCharPos().x) {
+                if (iRand == 4 || iRand == 1 ||
+                    iRand == 6 && enemyPos.x <= hero.getCharPos().x) {
                     enemyPos.x += aiSpeed;
                     enemy.width = abs(enemy.width);
                 }
-                else if (iRand == 11 || iRand == 5 || iRand == 3 && enemyPos.x <= hero.getCharPos().x) {
+                else if (iRand == 11 || iRand == 5 ||
+                    iRand == 3 && enemyPos.x <= hero.getCharPos().x) {
                     enemyPos.x -= aiSpeed;
                     if (enemy.width > 0) {
                         enemy.width *= -1;
@@ -310,47 +333,46 @@ int main(void)
                 }
             }
 
-
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 // Calculate direction vector from player to crosshair
-                Vector2 direction = Vector2Normalize(Vector2Subtract(crosshair.position, hero.getCharPos()));
+                Vector2 direction = Vector2Normalize(
+                    Vector2Subtract(crosshair.position, hero.getCharPos()));
 
                 // Set initial bullet velocity based on direction
-                Vector2 bulletVelocity = Vector2Scale(direction, 10); // Adjust the bullet speed as needed
+                Vector2 bulletVelocity =
+                    Vector2Scale(direction, 10); // Adjust the bullet speed as needed
 
                 // Add new bullet to array
-                bullets = (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
-                bullets[bulletCount] = InitBullet(hero.getCharPos(), bulletVelocity, bulletTexture);
+                bullets =
+                    (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
+                bullets[bulletCount] =
+                    InitBullet(hero.getCharPos(), bulletVelocity, bulletTexture);
                 bulletCount++;
             }
 
             // Update and draw bullets
-            for (int i = 0; i < bulletCount; i++)
-            {
+            for (int i = 0; i < bulletCount; i++) {
                 UpdateBullet(bullets[i]);
                 float z[2] = { bullets[i].position.x, bullets[i].position.y };
 
                 // Remove bullets that go off-screen
-                if (bullets[i].position.x > screenWidth || bullets[i].position.y > screenHeight ||
-                    bullets[i].position.x < 0 || bullets[i].position.y < 0)
-                {
+                if (bullets[i].position.x > screenWidth ||
+                    bullets[i].position.y > screenHeight || bullets[i].position.x < 0 ||
+                    bullets[i].position.y < 0) {
                     // Remove bullet from array
-                    for (int j = i; j < bulletCount - 1; j++)
-                    {
+                    for (int j = i; j < bulletCount - 1; j++) {
                         bullets[j] = bullets[j + 1];
                     }
                     bulletCount--;
                     bullets = (Bullet*)realloc(bullets, bulletCount * sizeof(Bullet));
-                    
+
                     i--; // Update loop index
                 }
                 if (collision(10, 27, z, x)) {
                     PlaySound(sound);
                     cout << "Enemy has been hit" << endl;
                     enemyHit = true;
-                    for (int j = i; j < bulletCount - 1; j++)
-                    {
+                    for (int j = i; j < bulletCount - 1; j++) {
                         bullets[j] = bullets[j + 1];
                     }
                     bulletCount--;
@@ -360,71 +382,61 @@ int main(void)
                     i--;
                 }
             }
-            
-          
-                //if (enemyHit == true)
-                //{
-                //    enemyCount++;
-                //    cout << "enemy hit = " << enemyHit << endl;
-                //    enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth, screenHeight);
-                //    for (int i = 0; i < enemyCount; i++) {
-                //        DrawTextureRec(enemy, enemyRec, enemyPositions[i], WHITE);
-                //        cout << "enemy needs to be redrawn" << enemyCount << endl;
-                //    }
-                //    enemyHit = false;
-                //    // Exit the loop since we already hit the enemy
-                //}
-           
 
-                
-            
+            // if (enemyHit == true)
+            //{
+            //     enemyCount++;
+            //     cout << "enemy hit = " << enemyHit << endl;
+            //     enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth,
+            //     screenHeight); for (int i = 0; i < enemyCount; i++) {
+            //         DrawTextureRec(enemy, enemyRec, enemyPositions[i], WHITE);
+            //         cout << "enemy needs to be redrawn" << enemyCount << endl;
+            //     }
+            //     enemyHit = false;
+            //     // Exit the loop since we already hit the enemy
+            // }
 
             // Draw bullets
-            for (int i = 0; i < bulletCount; i++)
-            {
+            for (int i = 0; i < bulletCount; i++) {
                 DrawBullet(bullets[i]);
             }
 
-
-
-            if (enemyPos.x > screenWidth-100) {
-                enemyPos.x = screenWidth-100;
+            if (enemyPos.x > screenWidth - 100) {
+                enemyPos.x = screenWidth - 100;
             }
             else if (enemyPos.x < 0) {
                 enemyPos.x = 0;
             }
 
-            if (enemyPos.y > screenHeight-350) {
-                enemyPos.y = screenHeight-350;
+            if (enemyPos.y > screenHeight - 350) {
+                enemyPos.y = screenHeight - 350;
             }
             else if (enemyPos.y < 0) {
                 enemyPos.y = 0;
             }
 
             ClearBackground(RAYWHITE);
-            //DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
-            //DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
+            // DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
+            // DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
 
-            //DrawCircleV(ballPosition, 50, MAROON);
+            // DrawCircleV(ballPosition, 50, MAROON);
 
             // EndDrawing();
 
         } break;
-        case ENDING:
-        {
+        case ENDING: {
             // TODO: Update ENDING screen variables here!
             DrawTexturePro(background, screen, screen, Vector2Zero(), 0, WHITE);
             // Press enter to return to TITLE screen
-            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-            {
+            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
                 currentScreen = TITLE;
             }
         } break;
-        case EASTEREGG:
-        {
+        case EASTEREGG: {
             DrawTexturePro(zuc, screen, screen, Vector2Zero(), 0, WHITE);
-        }break;
-        default: break;
+        } break;
+        default:
+            break;
         }
         //----------------------------------------------------------------------------------
 
@@ -432,49 +444,42 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        //ClearBackground(WHITE);
+        // ClearBackground(WHITE);
         ClearBackground(GetColor(0x052c46ff));
 
-
-        switch (currentScreen)
-        {
-        case LOGO:
-        {
+        switch (currentScreen) {
+        case LOGO: {
             // TODO: Draw LOGO screen here!
             DrawText("Loading . . .", 20, 20, 40, WHITE);
             DrawText("WAIT for 5 SECONDS...", 1920, 1080, 50, WHITE);
 
         } break;
-        case TITLE:
-        {
+        case TITLE: {
             // TODO: Draw TITLE screen here!
 
-            //DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
+            // DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
             DrawTextEx(fonts[fType], "Zombie Shooter", title, 80, fSpace, VIOLET);
             DrawText("PRESS SPACE to PLAY", 500, 640, 50, YELLOW);
 
         } break;
-        case GAMEPLAY:
-        {
+        case GAMEPLAY: {
             DrawBullet(bullet);
             DrawCrosshair(crosshair);
-            
-            //DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
-        }break;
-        case ENDING:
-        {
+
+            // DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
+        } break;
+        case ENDING: {
             // TODO: Draw ENDING screen here!
             DrawRectangle(0, 0, screenWidth, screenHeight, RED);
             DrawText("Game OVER", 20, 20, 40, DARKBLUE);
             DrawText("PRESS ESC	TO CLOSE", 120, 220, 20, DARKBLUE);
-        }break;
-        case EASTEREGG:
-        {
+        } break;
+        case EASTEREGG: {
             DrawText("EASTER EGG!", 20, 20, 40, DARKBLUE);
         }
 
-
-        default: break;
+        default:
+            break;
         }
 
         EndDrawing();
@@ -494,11 +499,11 @@ int main(void)
     UnloadTexture(crosshair.texture);
     UnloadTexture(bulletTexture);
     free(bullets);
-    //ClearBackground(background);
-    //UnloadTexture(background);
+    // ClearBackground(background);
+    // UnloadTexture(background);
     UnloadSound(sound);
     CloseAudioDevice();
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow(); // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;
