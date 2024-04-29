@@ -78,17 +78,19 @@ int main(void) {
 
     // Fonts
     Font fonts[MAX_FONTS] = { 0 };
-    fonts[1] = LoadFont("alagard.png");
+    fonts[1] = LoadFont("coolfont.png");
     // background
     float scrollingBack = 0.0f;
-    Texture2D zuc = LoadTexture("zuc.png");
-    Texture2D Graveyard = LoadTexture("gravesfin.png");
+
+
+    Texture2D Graveyard = LoadTexture("map.png");
     Texture2D titleScreen = LoadTexture("TITLE.png");
     if (scrollingBack <= -Graveyard.width * 2)
         scrollingBack = 0;
-    // lolz
     Texture2D background = LoadTexture("Ending.jpeg");
     Texture2D logo = LoadTexture("logo.png");
+
+
     // Enemy Texture
     int enemyframesSpeed = 8;
     Texture2D enemy = LoadTexture("deadScarfy.png");
@@ -104,13 +106,13 @@ int main(void) {
 
     Character hero;
     hero.setFrame(8);
-    hero.setChar(LoadTexture("scarfy.png"));
+    hero.setChar(LoadTexture("hero.png"));
     hero.setRectangle(0, 0, hero.getCharacterWidth() / 6,
         hero.getCharacterHeight());
     hero.setVector(screenWidth / 2 - hero.getRectangleWidth() / 2,
         screenWidth / 2 - hero.getCharacterWidth() / 2);
 
-    ////dimensions of ENEMY
+    //Enemy parameters, width, "hitbox", and such
     Rectangle enemyRec;
     enemyRec.width = enemy.width / 6; // because of frames
     enemyRec.height = enemy.height;
@@ -133,9 +135,8 @@ int main(void) {
     {
         DrawCrosshair(crosshair);
         UpdateCrosshair(crosshair);
-        // Update
-        // UpdateDrawFrame();
-        //----------------------------------------------------------------------------------
+        
+
         switch (currentScreen) {
         case LOGO: {
             DrawTexture(logo, 800, 300, WHITE);
@@ -165,8 +166,7 @@ int main(void) {
             UpdateCrosshair(crosshair);
             UpdateBullet(bullet);
             DrawTexture(Graveyard, 0, 0, WHITE);
-            // currentScreen = GAMEPLAY;
-            //  TODO: Update GAMEPLAY screen variables here!
+          
             enemyframesCounter++;
             framesCounter++;
             // COLLISION DETECTION
@@ -177,10 +177,6 @@ int main(void) {
                 PlaySound(sound);
                 currentScreen = ENDING;
             }
-            // bool collision(int playerRadius, int aiRaidius, float* playerVector,
-            // float* aiVector) {
-
-            // Bullet Collision
 
             if (framesCounter >= (60 / hero.getFrame())) {
                 framesCounter = 0;
@@ -206,8 +202,9 @@ int main(void) {
             if (enemyHit == true) {
                 enemyCount++;
                 cout << "enemy hit = " << enemyCount << endl;
-                enemyPositions[enemyCount] =
-                    GenerateRandomPosition(screenWidth, screenHeight);
+                for (int i = 0; i < enemyCount; i++) {
+                    enemyPositions[i] = GenerateRandomPosition(screenWidth, screenHeight);
+                }
 
                 enemyHit = false;
                 // Exit the loop since we already hit the enemy
@@ -237,25 +234,21 @@ int main(void) {
                 if (hero.getRectangleWidth() > 0) {
                     hero.setRectangleWidthChange(-1);
                 }
-                // if (hero.width > 0) {
-                //     hero.width *= -1;
-                // }
+              
             }
             if (IsKeyDown(KEY_W))
                 hero.setVectorYMove(-4);
             if (IsKeyDown(KEY_S))
                 hero.setVectorYMove(4);
 
-            // if (IsKeyDown(KEY_W)) heroPos.y -= 4.0f;
-            // if (IsKeyDown(KEY_S)) heroPos.y += 4.0f;
+
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 direction = Vector2Normalize(
                     Vector2Subtract(crosshair.position, hero.getCharPos()));
 
                 Vector2 bulletVelocity = Vector2Scale(direction, 10);
 
-                // bullets[bulletCount] = InitBullet(player.getCharPos(),
-                // bulletVelocity, LoadTexture("bullet.png")); bulletCount++;
+              
             }
 
             //  BeginDrawing();
@@ -266,10 +259,7 @@ int main(void) {
             int towardsPlayer = (rand() % 2);
             float aiSpeed = 3.5f;
 
-            /*for (int i = 0; i < enemyCount; i++) {
-                UpdateEnemyPosition(enemyPositions[i], hero.getCharPos(), iRand,
-            aiSpeed, enemy.width);
-            }*/
+           
 
             for (int i = 0; i < enemyCount; i++) {
                 srand(time(NULL) + iRand);
@@ -342,12 +332,19 @@ int main(void) {
                 Vector2 bulletVelocity =
                     Vector2Scale(direction, 10); // Adjust the bullet speed as needed
 
-                // Add new bullet to array
-                bullets =
-                    (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
-                bullets[bulletCount] =
-                    InitBullet(hero.getCharPos(), bulletVelocity, bulletTexture);
-                bulletCount++;
+                // Reallocate memory for bullets
+                Bullet* newBullets = (Bullet*)realloc(bullets, (bulletCount + 1) * sizeof(Bullet));
+                if (newBullets == NULL) {
+                    
+                    cout << "Error: Failed to allocate memory for bullets!" << endl;
+                    CloseWindow();
+                }
+                else {
+                    bullets = newBullets;
+
+                    bullets[bulletCount] = InitBullet(hero.getCharPos(), bulletVelocity, bulletTexture);
+                    bulletCount++;
+                }
             }
 
             // Update and draw bullets
@@ -368,7 +365,9 @@ int main(void) {
 
                     i--; // Update loop index
                 }
-                if (collision(10, 27, z, x)) {
+                for(int j = 0; j < enemyCount; j++){
+                float enemyPos[2] = { enemyPositions[j].x, enemyPositions[j].y };
+                if (collision(10, 27, z, x) || collision(10, 27, z, enemyPos)) {
                     PlaySound(sound);
                     cout << "Enemy has been hit" << endl;
                     enemyHit = true;
@@ -381,20 +380,10 @@ int main(void) {
                     // Update loop index
                     i--;
                 }
-            }
+             }
+         }
 
-            // if (enemyHit == true)
-            //{
-            //     enemyCount++;
-            //     cout << "enemy hit = " << enemyHit << endl;
-            //     enemyPositions[enemyCount] = GenerateRandomPosition(screenWidth,
-            //     screenHeight); for (int i = 0; i < enemyCount; i++) {
-            //         DrawTextureRec(enemy, enemyRec, enemyPositions[i], WHITE);
-            //         cout << "enemy needs to be redrawn" << enemyCount << endl;
-            //     }
-            //     enemyHit = false;
-            //     // Exit the loop since we already hit the enemy
-            // }
+            
 
             // Draw bullets
             for (int i = 0; i < bulletCount; i++) {
@@ -416,12 +405,7 @@ int main(void) {
             }
 
             ClearBackground(RAYWHITE);
-            // DrawTextureRec(hero, hazmatRec, heroPos, WHITE);
-            // DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
-
-            // DrawCircleV(ballPosition, 50, MAROON);
-
-            // EndDrawing();
+            
 
         } break;
         case ENDING: {
@@ -432,16 +416,14 @@ int main(void) {
                 currentScreen = TITLE;
             }
         } break;
-        case EASTEREGG: {
-            DrawTexturePro(zuc, screen, screen, Vector2Zero(), 0, WHITE);
-        } break;
+        
         default:
             break;
         }
-        //----------------------------------------------------------------------------------
+        
 
-        // Draw
-        //----------------------------------------------------------------------------------
+       
+        
         BeginDrawing();
 
         // ClearBackground(WHITE);
@@ -450,16 +432,13 @@ int main(void) {
         switch (currentScreen) {
         case LOGO: {
             // TODO: Draw LOGO screen here!
-            DrawText("Loading . . .", 20, 20, 40, WHITE);
-            DrawText("WAIT for 5 SECONDS...", 1920, 1080, 50, WHITE);
+            DrawText("Loading Textures . . .", 20, 20, 40, WHITE);
+            DrawText("Please WAIT...", 1920, 1080, 50, WHITE);
 
         } break;
-        case TITLE: {
-            // TODO: Draw TITLE screen here!
-
-            // DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
+        case TITLE: { //draw Title screen
             DrawTextEx(fonts[fType], "Zombie Shooter", title, 80, fSpace, VIOLET);
-            DrawText("PRESS SPACE to PLAY", 500, 640, 50, YELLOW);
+            DrawText("PRESS SPACE to ENTER", 500, 640, 50, YELLOW);
 
         } break;
         case GAMEPLAY: {
@@ -471,12 +450,10 @@ int main(void) {
         case ENDING: {
             // TODO: Draw ENDING screen here!
             DrawRectangle(0, 0, screenWidth, screenHeight, RED);
-            DrawText("Game OVER", 20, 20, 40, DARKBLUE);
-            DrawText("PRESS ESC	TO CLOSE", 120, 220, 20, DARKBLUE);
+            DrawText("YOU ARE DEAD", 20, 20, 40, DARKBLUE);
+            DrawText("PRESS ESC	TO QUIT", 120, 220, 20, DARKBLUE);
         } break;
-        case EASTEREGG: {
-            DrawText("EASTER EGG!", 20, 20, 40, DARKBLUE);
-        }
+        
 
         default:
             break;

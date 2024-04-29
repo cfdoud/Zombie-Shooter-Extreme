@@ -44,19 +44,16 @@
     <Image Include="hazmat.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="scarfy.png">
+    <Image Include="hero.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="deadScarfy.png">
+    <Image Include="zombie.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Ending.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="gravesnew_1_4.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="alagard.png">
+    <Image Include="coolfont.png">
       <Filter>Source Files</Filter>
     </Image>
     <Image Include="logo.png">
@@ -68,7 +65,7 @@
     <Image Include="TITLE.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="gravesfin.png">
+    <Image Include="map.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\..\..\..\..\..\..\git-root\crosshair.png">

@@ -136,17 +136,16 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\..\..\git-root\crosshair.png" />
-    <Image Include="alagard.png" />
+    <Image Include="coolfont.png" />
     <Image Include="bullet.png" />
     <Image Include="crosshair1.png" />
-    <Image Include="deadScarfy.png" />
+    <Image Include="zombie.png" />
     <Image Include="Ending.jpeg" />
-    <Image Include="gravesfin.png" />
-    <Image Include="gravesnew_1_4.png" />
+    <Image Include="map.png" />
     <Image Include="hazmat.png" />
     <Image Include="Image.png" />
     <Image Include="logo.png" />
-    <Image Include="scarfy.png" />
+    <Image Include="hero.png" />
     <Image Include="TITLE.png" />
     <Image Include="zuc.png" />
   </ItemGroup>
