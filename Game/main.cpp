@@ -6,7 +6,7 @@
 #include <iostream>
 #include "logic.h"
 #include "crosshair.h"
-#include "character.h"
+#include "hero.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "vector"
@@ -456,7 +456,7 @@ int main(void) {
             
             //DrawRectangle(0, 0, screenWidth, screenHeight, RED);
             //DrawText("YOU ARE DEAD", 20, 20, 40, DARKBLUE);
-            DrawText(("High-Score of " + to_string(enemyCount)).c_str(), 1000, 500, 40, DARKBLUE);
+            DrawText(("High-Score of " + to_string(enemyCount)).c_str(), 800, 500, 40, DARKBLUE);
             DrawText("PRESS ESC	TO QUIT", 120, 220, 20, DARKBLUE);
             
         } break;

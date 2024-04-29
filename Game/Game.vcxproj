@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
-    <ClInclude Include="Character.h" />
+    <ClInclude Include="hero.h" />
     <ClInclude Include="crosshair.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fonts.h" />

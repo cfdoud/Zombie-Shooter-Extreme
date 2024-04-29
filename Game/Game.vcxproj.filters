@@ -85,7 +85,7 @@
     <ClInclude Include="logic.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
+    <ClInclude Include="hero.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="fonts.h">
